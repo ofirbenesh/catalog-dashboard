@@ -1,51 +1,88 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { format } from 'date-fns';
+import axios from 'axios';
 import CatalogTable from './components/CatalogTable';
 import AddCatalogForm from './components/AddCatalogForm';
 
+interface Catalog {
+    id: string;
+    name: string;
+    primary: boolean;
+    indexedAt: string;
+}
+
 const App: React.FC = () => {
-    const [catalogs, setCatalogs] = useState([
-        { id: '1', name: 'Electronics', primary: true, indexedAt: '2024-01-01 10:00:00' },
-        { id: '2', name: 'Clothing', primary: false, indexedAt: '2024-01-02 14:00:00' },
-        { id: '3', name: 'Home Decor', primary: false, indexedAt: '2024-01-03 16:00:00' },
-    ]);
-
+    const [catalogs, setCatalogs] = useState<Catalog[]>([]);
     const [showAddForm, setShowAddForm] = useState(false);
+    const [loading, setLoading] = useState(true);
 
-    const handleAddCatalog = (name: string, primary: boolean) => {
+    // Fetch catalogs from the server when the app loads
+    useEffect(() => {
+        const fetchCatalogs = async () => {
+            try {
+                const response = await axios.get('http://localhost:3000/catalogs');
+                console.log('Fetched catalogs:', response.data); // Debug log
+                setCatalogs(response.data); // Update state with fetched data
+            } catch (error) {
+                console.error('Error fetching catalogs:', error); // Debug error
+            } finally {
+                setLoading(false); // Ensure loading stops
+            }
+        };
+    
+        fetchCatalogs();
+    }, []);
+    
+
+    // Add a new catalog by sending it to the backend
+    const handleAddCatalog = async (name: string, primary: boolean) => {
+        const formattedDate = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
         const maxId = catalogs.reduce((max, catalog) => Math.max(max, parseInt(catalog.id)), 0);
         const newId = (maxId + 1).toString();
 
-    const formattedDate = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
+        const newCatalog = {
+            id: newId, // Newly generated ID
+            name,
+            primary,
+            indexedAt: formattedDate,
+        };
 
-    const newCatalog = {
-        id: newId,
-        name,
-        primary,
-        indexedAt: formattedDate,
+        try {
+            const response = await axios.post('http://localhost:3000/catalogs', newCatalog); // POST new catalog to backend
+            setCatalogs([...catalogs, response.data]); // Update state with the new catalog
+        } catch (error) {
+            console.error('Error adding catalog:', error);
+        } finally {
+            setShowAddForm(false);
+        }
     };
 
-        setCatalogs([...catalogs, newCatalog]);
-        setShowAddForm(false);
+    const handleDeleteCatalog = async (id: string) => {
+        console.log('Deleting catalog with id:', id); // Debug log
+        try {
+            await axios.delete(`http://localhost:3000/catalogs/${id}`);
+            setCatalogs(catalogs.filter((catalog) => catalog.id !== id));
+        } catch (error) {
+            console.error('Error deleting catalog:', error);
+        }
     };
+    
+
+    if (loading) {
+        return <p>Loading catalogs...</p>; // Show a loading message while data is being fetched
+    }
 
     return (
         <div className="container mt-5">
             <h1 className="text-center mb-4">Catalog Dashboard</h1>
-            <button
-                className="btn btn-primary mb-3"
-                onClick={() => setShowAddForm(true)}
-            >
+            <button className="btn btn-primary mb-3" onClick={() => setShowAddForm(true)}>
                 Add Catalog
             </button>
 
             {showAddForm && (
                 <div className="card p-3 mb-4">
                     <AddCatalogForm onAddCatalog={handleAddCatalog} />
-                    <button
-                        className="btn btn-secondary mt-2"
-                        onClick={() => setShowAddForm(false)}
-                    >
+                    <button className="btn btn-secondary mt-2" onClick={() => setShowAddForm(false)}>
                         Close
                     </button>
                 </div>
@@ -53,7 +90,7 @@ const App: React.FC = () => {
 
             <CatalogTable
                 catalogs={catalogs}
-                onDelete={(ids) => console.log(ids)}
+                onDelete={(ids) => ids.forEach((id) => handleDeleteCatalog(id))} // Pass delete handler
                 onTogglePrimary={(id, primary) => console.log(id, primary)}
             />
         </div>

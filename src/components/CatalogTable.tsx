@@ -7,47 +7,55 @@ interface Catalog {
     indexedAt: string;
 }
 
-interface Props {
+interface CatalogTableProps {
     catalogs: Catalog[];
     onDelete: (ids: string[]) => void;
     onTogglePrimary: (id: string, primary: boolean) => void;
 }
 
-const CatalogTable: React.FC<Props> = ({ catalogs, onDelete, onTogglePrimary }) => (
-    <table className="table table-striped">
-        <thead className="thead-light">
-            <tr>
-                <th>Name</th>
-                <th>Primary</th>
-                <th>Indexed At</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {catalogs.map((catalog) => (
-                <tr key={catalog.id}>
-                    <td>{catalog.name}</td>
-                    <td>
+const CatalogTable: React.FC<CatalogTableProps> = ({ catalogs, onDelete, onTogglePrimary }) => {
+    if (catalogs.length === 0) {
+        return <p>No catalogs found.</p>; // Show a message if no data exists
+    }
+
+    return (
+        <table className="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Primary</th>
+                    <th>Indexed At</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+                <tbody>
+                {catalogs.map((catalog) => (
+                    <tr key={catalog.id}> {/* Use id as the unique key */}
+                        <td>{catalog.name}</td>
+                        <td>{catalog.primary ? 'Yes' : 'No'}</td>
+                        <td>{new Date(catalog.indexedAt).toLocaleString()}</td>
+                        <td>
                         <button
-                            className={`btn ${catalog.primary ? 'btn-success' : 'btn-outline-success'}`}
-                            onClick={() => onTogglePrimary(catalog.id, !catalog.primary)}
-                        >
-                            {catalog.primary ? 'Unset Primary' : 'Set Primary'}
-                        </button>
-                    </td>
-                    <td>{catalog.indexedAt}</td>
-                    <td>
-                        <button
-                            className="btn btn-danger"
-                            onClick={() => onDelete([catalog.id])}
+                            className="btn btn-danger btn-sm"
+                            onClick={() => {
+                                console.log('Deleting catalog with id:', catalog.id); // Debug log
+                                onDelete([catalog.id]);
+                            }}
                         >
                             Delete
                         </button>
-                    </td>
-                </tr>
-            ))}
-        </tbody>
-    </table>
-);
+                            <button
+                                className="btn btn-secondary btn-sm"
+                                onClick={() => onTogglePrimary(catalog.id, !catalog.primary)}
+                            >
+                                Toggle Primary
+                            </button>
+                        </td>
+                    </tr>
+                ))}
+            </tbody>
+        </table>
+    );
+};
 
 export default CatalogTable;
