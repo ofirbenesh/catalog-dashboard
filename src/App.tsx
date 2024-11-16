@@ -41,7 +41,7 @@ const App: React.FC = () => {
         const newId = (maxId + 1).toString();
 
         const newCatalog = {
-            id: newId, // Newly generated ID
+            id: newId,
             name,
             primary,
             indexedAt: formattedDate,
@@ -66,6 +66,20 @@ const App: React.FC = () => {
             console.error('Error deleting catalog:', error);
         }
     };
+
+    const handleUpdateCatalog = async (id: string, updateData: Partial<Catalog>) => {
+        try {
+            const response = await axios.put(`http://localhost:3000/catalogs/${id}`, updateData);
+            // Update the local state with the modified catalog
+            setCatalogs(
+                catalogs.map((catalog) =>
+                    catalog.id === id ? { ...catalog, ...updateData } : catalog
+                )
+            );
+        } catch (error) {
+            console.error('Error updating catalog:', error);
+        }
+    };    
     
 
     if (loading) {
@@ -90,8 +104,8 @@ const App: React.FC = () => {
 
             <CatalogTable
                 catalogs={catalogs}
-                onDelete={(ids) => ids.forEach((id) => handleDeleteCatalog(id))} // Pass delete handler
-                onTogglePrimary={(id, primary) => console.log(id, primary)}
+                onDelete={(ids) => ids.forEach((id) => handleDeleteCatalog(id))}
+                onUpdate={(id, updateData) => handleUpdateCatalog(id, updateData)}
             />
         </div>
     );

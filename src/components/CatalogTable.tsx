@@ -10,10 +10,10 @@ interface Catalog {
 interface CatalogTableProps {
     catalogs: Catalog[];
     onDelete: (ids: string[]) => void;
-    onTogglePrimary: (id: string, primary: boolean) => void;
+    onUpdate: (id: string, updateData: Partial<Catalog>) => void;
 }
 
-const CatalogTable: React.FC<CatalogTableProps> = ({ catalogs, onDelete, onTogglePrimary }) => {
+const CatalogTable: React.FC<CatalogTableProps> = ({ catalogs, onDelete, onUpdate }) => {
     if (catalogs.length === 0) {
         return <p>No catalogs found.</p>; // Show a message if no data exists
     }
@@ -28,32 +28,38 @@ const CatalogTable: React.FC<CatalogTableProps> = ({ catalogs, onDelete, onToggl
                     <th>Actions</th>
                 </tr>
             </thead>
-                <tbody>
-                {catalogs.map((catalog) => (
-                    <tr key={catalog.id}> {/* Use id as the unique key */}
-                        <td>{catalog.name}</td>
-                        <td>{catalog.primary ? 'Yes' : 'No'}</td>
-                        <td>{new Date(catalog.indexedAt).toLocaleString()}</td>
-                        <td>
+                    <tbody>
+            {catalogs.map((catalog) => (
+                <tr key={catalog.id}>
+                    <td>{catalog.name}</td>
+                    <td>{catalog.primary ? 'Yes' : 'No'}</td>
+                    <td>{new Date(catalog.indexedAt).toLocaleString()}</td>
+                    <td>
                         <button
                             className="btn btn-danger btn-sm"
-                            onClick={() => {
-                                console.log('Deleting catalog with id:', catalog.id); // Debug log
-                                onDelete([catalog.id]);
-                            }}
+                            onClick={() => onDelete([catalog.id])}
                         >
                             Delete
                         </button>
-                            <button
-                                className="btn btn-secondary btn-sm"
-                                onClick={() => onTogglePrimary(catalog.id, !catalog.primary)}
-                            >
-                                Toggle Primary
-                            </button>
-                        </td>
-                    </tr>
-                ))}
-            </tbody>
+                        <button
+                            className="btn btn-secondary btn-sm"
+                            onClick={() => onUpdate(catalog.id, { primary: !catalog.primary })}
+                        >
+                            Toggle Primary
+                        </button>
+                        <button
+                            className="btn btn-primary btn-sm"
+                            onClick={() =>
+                                onUpdate(catalog.id, { indexedAt: new Date().toISOString() })
+                            }
+                        >
+                            Start Indexing
+                        </button>
+                    </td>
+                </tr>
+            ))}
+        </tbody>
+
         </table>
     );
 };
