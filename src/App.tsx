@@ -3,6 +3,8 @@ import { format } from 'date-fns';
 import axios from 'axios';
 import CatalogTable from './components/CatalogTable';
 import AddCatalogForm from './components/AddCatalogForm';
+import 'bootstrap/dist/css/bootstrap.min.css'; 
+import './App.css';
 
 interface Catalog {
     id: string;
@@ -15,6 +17,10 @@ const App: React.FC = () => {
     const [catalogs, setCatalogs] = useState<Catalog[]>([]);
     const [showAddForm, setShowAddForm] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [showAddModal, setShowAddModal] = useState(false);
+
+    const handleShowModal = () => setShowAddModal(true);
+    const handleCloseModal = () => setShowAddModal(false);
 
     // Fetch catalogs from the server when the app loads
     useEffect(() => {
@@ -87,26 +93,38 @@ const App: React.FC = () => {
     }
 
     return (
-        <div className="container mt-5">
-            <h1 className="text-center mb-4">Catalog Dashboard</h1>
-            <button className="btn btn-primary mb-3" onClick={() => setShowAddForm(true)}>
-                Add Catalog
-            </button>
-
-            {showAddForm && (
-                <div className="card p-3 mb-4">
-                    <AddCatalogForm onAddCatalog={handleAddCatalog} />
-                    <button className="btn btn-secondary mt-2" onClick={() => setShowAddForm(false)}>
-                        Close
-                    </button>
+        <div className="main-container">
+            <div className="container mt-5">
+                {/* Add Logo */}
+                <div className="text-center">
+                    <img src="/logo2.png" alt="Logo" className="logo" />
                 </div>
-            )}
 
-            <CatalogTable
-                catalogs={catalogs}
-                onDelete={(ids) => ids.forEach((id) => handleDeleteCatalog(id))}
-                onUpdate={(id, updateData) => handleUpdateCatalog(id, updateData)}
-            />
+                {/* Headline */}
+                <h1 className="text-center mb-4">Catalog Dashboard</h1>
+
+                {/* Add Catalog Button */}
+                <button className="btn btn-primary mb-3" onClick={() => setShowAddForm(true)}>
+                    Add Catalog
+                </button>
+
+                {/* Add Catalog Form */}
+                {showAddForm && (
+                    <div className="card p-3 mb-4">
+                        <AddCatalogForm onAddCatalog={handleAddCatalog} />
+                        <button className="btn btn-secondary mt-2" onClick={() => setShowAddForm(false)}>
+                            Close
+                        </button>
+                    </div>
+                )}
+
+                {/* Catalog Table */}
+                <CatalogTable
+                    catalogs={catalogs}
+                    onDelete={(ids) => ids.forEach((id) => handleDeleteCatalog(id))}
+                    onUpdate={(id, updateData) => handleUpdateCatalog(id, updateData)}
+                />
+            </div>
         </div>
     );
 };

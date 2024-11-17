@@ -1,38 +1,77 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+/* Set a gradient background color */
+.main-container {
+  background: linear-gradient(to bottom right, #743030, #4d1e1e);
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  padding: 20px 0;
+  font-family: 'Roboto', sans-serif; /* Use custom font */
 }
 
-.App-link {
-  color: #61dafb;
+/* Logo styling */
+.logo {
+  max-width: 150px;
+  height: auto;
+  margin-bottom: 20px; /* Add spacing below the logo */
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Style the headline */
+h1 {
+  color: #fff0f0; /* Dark Gray */
+  font-weight: bold;
+}
+
+/* Style the table */
+.table {
+  background: #f8c3c3;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.table thead {
+  background: #945050;
+  color: #ffffff;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #f9f9f9; /* Light gray for striped rows */
+}
+
+.table-striped tbody tr:hover {
+  background-color: #e9ecef; /* Slightly darker gray for hover */
+}
+
+/* Style buttons */
+.btn {
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  font-weight: 500;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border: none;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border: none;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  border: none;
+}
+
+/* Add shadow to cards */
+.card {
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Style badges */
+.badge {
+  font-size: 0.9rem;
+  padding: 0.5rem 0.8rem;
 }
