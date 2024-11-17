@@ -3,6 +3,7 @@ import { format } from 'date-fns';
 import axios from 'axios';
 import CatalogTable from './components/CatalogTable';
 import AddCatalogForm from './components/AddCatalogForm';
+import handleAddCatalog from './components/AddCatalog';
 import 'bootstrap/dist/css/bootstrap.min.css'; 
 import './App.css';
 
@@ -19,6 +20,9 @@ const App: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [showAddModal, setShowAddModal] = useState(false);
 
+    const [filteredCatalogs, setFilteredCatalogs] = useState<Catalog[]>([]);
+    const [searchTerm, setSearchTerm] = useState('');
+
     const handleShowModal = () => setShowAddModal(true);
     const handleCloseModal = () => setShowAddModal(false);
 
@@ -26,43 +30,30 @@ const App: React.FC = () => {
     useEffect(() => {
         const fetchCatalogs = async () => {
             try {
-                const response = await axios.get('http://localhost:3000/catalogs');
-                console.log('Fetched catalogs:', response.data); // Debug log
-                setCatalogs(response.data); // Update state with fetched data
+                const response = await fetch('http://localhost:3000/catalogs');
+                const data = await response.json();
+                setCatalogs(data);
+                setFilteredCatalogs(data); // Initially, show all catalogs
             } catch (error) {
-                console.error('Error fetching catalogs:', error); // Debug error
+                console.error('Error fetching catalogs:', error);
             } finally {
-                setLoading(false); // Ensure loading stops
+                setLoading(false);
             }
         };
-    
+
         fetchCatalogs();
     }, []);
+
+    // Filter catalogs whenever searchTerm changes
+    useEffect(() => {
+        const filtered = catalogs.filter((catalog) =>
+            catalog.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        setFilteredCatalogs(filtered);
+    }, [searchTerm, catalogs]);
     
 
-    // Add a new catalog by sending it to the backend
-    const handleAddCatalog = async (name: string, primary: boolean) => {
-        const formattedDate = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
-        const maxId = catalogs.reduce((max, catalog) => Math.max(max, parseInt(catalog.id)), 0);
-        const newId = (maxId + 1).toString();
-
-        const newCatalog = {
-            id: newId,
-            name,
-            primary,
-            indexedAt: formattedDate,
-        };
-
-        try {
-            const response = await axios.post('http://localhost:3000/catalogs', newCatalog); // POST new catalog to backend
-            setCatalogs([...catalogs, response.data]); // Update state with the new catalog
-        } catch (error) {
-            console.error('Error adding catalog:', error);
-        } finally {
-            setShowAddForm(false);
-        }
-    };
-
+    // delete an existing catalog
     const handleDeleteCatalog = async (id: string) => {
         console.log('Deleting catalog with id:', id); // Debug log
         try {
@@ -72,7 +63,8 @@ const App: React.FC = () => {
             console.error('Error deleting catalog:', error);
         }
     };
-
+    
+    // update a catalog
     const handleUpdateCatalog = async (id: string, updateData: Partial<Catalog>) => {
         try {
             const response = await axios.put(`http://localhost:3000/catalogs/${id}`, updateData);
@@ -89,7 +81,7 @@ const App: React.FC = () => {
     
 
     if (loading) {
-        return <p>Loading catalogs...</p>; // Show a loading message while data is being fetched
+        return <p>Loading catalogs...</p>;
     }
 
     return (
@@ -103,6 +95,17 @@ const App: React.FC = () => {
                 {/* Headline */}
                 <h1 className="text-center mb-4">Catalog Dashboard</h1>
 
+                {/* Search Bar */}
+                <div className="mb-4">
+                    <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Search by name..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                </div>
+
                 {/* Add Catalog Button */}
                 <button className="btn btn-primary mb-3" onClick={() => setShowAddForm(true)}>
                     Add Catalog
@@ -111,7 +114,11 @@ const App: React.FC = () => {
                 {/* Add Catalog Form */}
                 {showAddForm && (
                     <div className="card p-3 mb-4">
-                        <AddCatalogForm onAddCatalog={handleAddCatalog} />
+                        <AddCatalogForm
+                            onAddCatalog={(name, primary) =>
+                                handleAddCatalog(name, primary, catalogs, setCatalogs, setShowAddForm)
+                            }
+                        />
                         <button className="btn btn-secondary mt-2" onClick={() => setShowAddForm(false)}>
                             Close
                         </button>
