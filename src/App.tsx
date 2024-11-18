@@ -4,6 +4,8 @@ import axios from 'axios';
 import CatalogTable from './components/CatalogTable';
 import AddCatalogForm from './components/AddCatalogForm';
 import handleAddCatalog from './components/AddCatalog';
+import handleDeleteCatalog from './components/DeleteCatalog';
+import handleUpdateCatalog from './components/UpdateCatalog';
 import 'bootstrap/dist/css/bootstrap.min.css'; 
 import './App.css';
 
@@ -52,32 +54,21 @@ const App: React.FC = () => {
         setFilteredCatalogs(filtered);
     }, [searchTerm, catalogs]);
     
-
-    // delete an existing catalog
-    const handleDeleteCatalog = async (id: string) => {
-        console.log('Deleting catalog with id:', id); // Debug log
-        try {
-            await axios.delete(`http://localhost:3000/catalogs/${id}`);
-            setCatalogs(catalogs.filter((catalog) => catalog.id !== id));
-        } catch (error) {
-            console.error('Error deleting catalog:', error);
-        }
-    };
     
-    // update a catalog
-    const handleUpdateCatalog = async (id: string, updateData: Partial<Catalog>) => {
-        try {
-            const response = await axios.put(`http://localhost:3000/catalogs/${id}`, updateData);
-            // Update the local state with the modified catalog
-            setCatalogs(
-                catalogs.map((catalog) =>
-                    catalog.id === id ? { ...catalog, ...updateData } : catalog
-                )
-            );
-        } catch (error) {
-            console.error('Error updating catalog:', error);
-        }
-    };    
+    // // update a catalog
+    // const handleUpdateCatalog = async (id: string, updateData: Partial<Catalog>) => {
+    //     try {
+    //         const response = await axios.put(`http://localhost:3000/catalogs/${id}`, updateData);
+    //         // Update the local state with the modified catalog
+    //         setCatalogs(
+    //             catalogs.map((catalog) =>
+    //                 catalog.id === id ? { ...catalog, ...updateData } : catalog
+    //             )
+    //         );
+    //     } catch (error) {
+    //         console.error('Error updating catalog:', error);
+    //     }
+    // };    
     
 
     if (loading) {
@@ -128,8 +119,10 @@ const App: React.FC = () => {
                 {/* Catalog Table */}
                 <CatalogTable
                     catalogs={catalogs}
-                    onDelete={(ids) => ids.forEach((id) => handleDeleteCatalog(id))}
-                    onUpdate={(id, updateData) => handleUpdateCatalog(id, updateData)}
+                    onDelete={(ids) => handleDeleteCatalog(ids, catalogs, setCatalogs)}
+                    onUpdate={(id, updateData) =>
+                        handleUpdateCatalog(id, updateData, catalogs, setCatalogs)
+                    }
                 />
             </div>
         </div>
