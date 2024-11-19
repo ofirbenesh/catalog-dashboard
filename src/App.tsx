@@ -52,23 +52,7 @@ const App: React.FC = () => {
             catalog.name.toLowerCase().includes(searchTerm.toLowerCase())
         );
         setFilteredCatalogs(filtered);
-    }, [searchTerm, catalogs]);
-    
-    
-    // // update a catalog
-    // const handleUpdateCatalog = async (id: string, updateData: Partial<Catalog>) => {
-    //     try {
-    //         const response = await axios.put(`http://localhost:3000/catalogs/${id}`, updateData);
-    //         // Update the local state with the modified catalog
-    //         setCatalogs(
-    //             catalogs.map((catalog) =>
-    //                 catalog.id === id ? { ...catalog, ...updateData } : catalog
-    //             )
-    //         );
-    //     } catch (error) {
-    //         console.error('Error updating catalog:', error);
-    //     }
-    // };    
+    }, [searchTerm, catalogs]); 
     
 
     if (loading) {

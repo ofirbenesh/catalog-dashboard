@@ -19,10 +19,14 @@ h1 {
   font-weight: bold;
 }
 
+.form-control {
+  width: 200px;
+}
+
 /* Search bar container */
 .search-bar {
   max-width: 300px; 
-  text-align: left; 
+  text-align: right; 
   margin-left: 0; 
 }
 
@@ -66,7 +70,7 @@ h1 {
 }
 
 .btn-primary {
-  background-color: #007bff;
+  background-color: #73b4fa;
   border: none;
 }
 
@@ -76,7 +80,7 @@ h1 {
 }
 
 .btn-secondary {
-  background-color: #6c757d;
+  background-color: #4feb71;
   border: none;
 }
 
