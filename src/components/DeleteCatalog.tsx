@@ -8,7 +8,9 @@ const handleDeleteCatalog = async (
 ) => {
     console.log('Deleting catalogs with IDs:', ids); // Debug log
     try {
+        // Delete all selected catalogs
         await Promise.all(ids.map((id) => axios.delete(`http://localhost:3000/catalogs/${id}`)));
+        // Update the state to exclude the deleted catalogs
         setCatalogs((prev) => prev.filter((catalog) => !ids.includes(catalog.id)));
     } catch (error) {
         console.error('Error deleting catalogs:', error);

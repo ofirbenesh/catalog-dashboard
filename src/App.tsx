@@ -6,6 +6,7 @@ import AddCatalogForm from './components/AddCatalogForm';
 import handleAddCatalog from './components/AddCatalog';
 import handleDeleteCatalog from './components/DeleteCatalog';
 import handleUpdateCatalog from './components/UpdateCatalog';
+import SearchBar from './components/SearchBar'; 
 import 'bootstrap/dist/css/bootstrap.min.css'; 
 import './App.css';
 
@@ -46,13 +47,13 @@ const App: React.FC = () => {
         fetchCatalogs();
     }, []);
 
-    // Filter catalogs whenever searchTerm changes
+    // Update filtered catalogs whenever `searchTerm` or `catalogs` changes
     useEffect(() => {
         const filtered = catalogs.filter((catalog) =>
             catalog.name.toLowerCase().includes(searchTerm.toLowerCase())
         );
         setFilteredCatalogs(filtered);
-    }, [searchTerm, catalogs]); 
+    }, [searchTerm, catalogs]);
     
 
     if (loading) {
@@ -71,15 +72,7 @@ const App: React.FC = () => {
                 <h1 className="text-center mb-4">Catalog Dashboard</h1>
 
                 {/* Search Bar */}
-                <div className="mb-4">
-                    <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Search by name..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                </div>
+                <SearchBar setSearchTerm={setSearchTerm} />
 
                 {/* Add Catalog Button */}
                 <button className="btn btn-primary mb-3" onClick={() => setShowAddForm(true)}>
@@ -102,7 +95,7 @@ const App: React.FC = () => {
 
                 {/* Catalog Table */}
                 <CatalogTable
-                    catalogs={catalogs}
+                    catalogs={filteredCatalogs}
                     onDelete={(ids) => handleDeleteCatalog(ids, catalogs, setCatalogs)}
                     onUpdate={(id, updateData) =>
                         handleUpdateCatalog(id, updateData, catalogs, setCatalogs)
