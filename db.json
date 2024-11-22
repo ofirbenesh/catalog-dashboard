@@ -1,0 +1,22 @@
+{
+    "catalogs": [
+        {
+            "id": "1",
+            "name": "Electronics",
+            "primary": true,
+            "indexedAt": "2024-11-18T12:00:00Z"
+        },
+        {
+            "id": "2",
+            "name": "Clothing",
+            "primary": false,
+            "indexedAt": "2024-11-18T11:00:00Z"
+        },
+        {
+            "id": "3",
+            "name": "Furniture",
+            "primary": false,
+            "indexedAt": "2024-11-18T10:00:00Z"
+        }
+    ]
+}

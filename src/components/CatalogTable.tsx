@@ -89,7 +89,7 @@ const CatalogTable: React.FC<CatalogTableProps> = ({ catalogs, onDelete, onUpdat
                                         onUpdate(catalog.id, { primary: !catalog.primary })
                                     }
                                 >
-                                    Toggle Primary
+                                    Make Primary
                                 </button>
                                 <button
                                     className="btn btn-primary btn-sm"
