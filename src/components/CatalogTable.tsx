@@ -77,12 +77,12 @@ const CatalogTable: React.FC<CatalogTableProps> = ({ catalogs, onDelete, onUpdat
                             </td>
                             <td>{new Date(catalog.indexedAt).toLocaleString()}</td>
                             <td>
-                                <button
-                                    className="btn btn-danger btn-sm me-2"
-                                    onClick={() => onDelete([catalog.id])}
-                                >
-                                    Delete
-                                </button>
+                            <button
+                                className="btn btn-danger btn-sm me-2"
+                                onClick={() => onDelete([catalog.id])}
+                            >
+                                <i className="bi bi-trash"></i> Delete
+                            </button>
                                 <button
                                     className="btn btn-secondary btn-sm me-2"
                                     onClick={() =>

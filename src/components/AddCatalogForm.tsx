@@ -52,6 +52,7 @@ const AddCatalogForm: React.FC<Props> = ({ onAddCatalog }) => {
                 type="button"
                 className="btn btn-primary w-100"
                 onClick={handleSubmit}
+                data-testid="submit-add-catalog"
             >
                 Add Catalog
             </button>

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { format } from 'date-fns';
-import axios from 'axios';
 import CatalogTable from './components/CatalogTable';
 import AddCatalogForm from './components/AddCatalogForm';
 import handleAddCatalog from './components/AddCatalog';

@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { Catalog } from './Catalog';
 
 const handleUpdateCatalog = async (
@@ -21,8 +20,10 @@ const handleUpdateCatalog = async (
                 // Update backend for all catalogs
                 await Promise.all(
                     updatedCatalogs.map((catalog) =>
-                        axios.put(`http://localhost:3000/catalogs/${catalog.id}`, {
-                            primary: catalog.primary,
+                        fetch(`http://localhost:3000/catalogs/${catalog.id}`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ primary: catalog.primary }),
                         })
                     )
                 );
@@ -32,7 +33,11 @@ const handleUpdateCatalog = async (
             } else {
                 // If setting 'primary' to false
                 // Update the specific catalog
-                await axios.put(`http://localhost:3000/catalogs/${id}`, updateData);
+                await fetch(`http://localhost:3000/catalogs/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updateData),
+                });
 
                 // Update local state
                 setCatalogs((prev) =>
@@ -44,7 +49,11 @@ const handleUpdateCatalog = async (
         } else if (updateData.indexedAt !== undefined) {
             // If updating 'indexedAt' field
             // Update backend
-            await axios.put(`http://localhost:3000/catalogs/${id}`, updateData);
+            await fetch(`http://localhost:3000/catalogs/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updateData),
+            });
 
             // Update local state
             setCatalogs((prev) =>
@@ -55,9 +64,12 @@ const handleUpdateCatalog = async (
                 )
             );
         } else {
-            // Other updates
-            // Update backend
-            await axios.put(`http://localhost:3000/catalogs/${id}`, updateData);
+            // Update backend for general updates
+            await fetch(`http://localhost:3000/catalogs/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updateData),
+            });
 
             // Update local state
             setCatalogs((prev) =>

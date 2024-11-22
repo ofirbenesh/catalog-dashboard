@@ -1,5 +1,4 @@
 import { format } from 'date-fns';
-import axios from 'axios';
 import { Catalog } from './Catalog';
 
 const handleAddCatalog = async (
@@ -21,8 +20,23 @@ const handleAddCatalog = async (
     };
 
     try {
-        const response = await axios.post('http://localhost:3000/catalogs', newCatalog);
-        setCatalogs((prev) => [...prev, response.data]); // Update state with the new catalog
+        // Use fetch to send a POST request
+        const response = await fetch('http://localhost:3000/catalogs', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newCatalog),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const createdCatalog = await response.json();
+
+        // Update state with the new catalog
+        setCatalogs((prev) => [...prev, createdCatalog]);
     } catch (error) {
         console.error('Error adding catalog:', error);
     } finally {

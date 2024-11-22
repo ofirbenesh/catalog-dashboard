@@ -1,9 +1,12 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+test("renders Catalog Dashboard title", async () => {
+    render(<App />);
+
+    // check title
+    await waitFor(() => {
+        expect(screen.getByText(/Catalog Dashboard/i)).toBeInTheDocument();
+    });
 });

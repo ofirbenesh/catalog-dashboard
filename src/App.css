@@ -1,3 +1,5 @@
+@import "bootstrap-icons/font/bootstrap-icons.css";
+
 /* Set a gradient background color */
 .main-container {
   background: linear-gradient(to bottom right, #93d8e3, #7dd7cc);
@@ -54,11 +56,11 @@ h1 {
 }
 
 .table-striped tbody tr:nth-of-type(odd) {
-  background-color: #f9f9f9; /* Light gray for striped rows */
+  background-color: #f9f9f9; 
 }
 
 .table-striped tbody tr:hover {
-  background-color: #e9ecef; /* Slightly darker gray for hover */
+  background-color: #e9ecef; 
 }
 
 /* Style buttons */
