@@ -45,9 +45,21 @@ $ git clone https://github.com/ofirbenesh/catalog-dashboard.git
 # For running the backend - go to repository
 $ gh repo clone ofirbenesh/backend
 
+# Install dependencies:
+$ npm install
+$ npm install mongoose
+$ npm install --save-dev @types/mongoose
+
+# make sure you are connected to MongoDB
+"connectionString": "mongodb://localhost:27017/"
+
+# Optional: if you want to preload Mock data into the DB to see how the table looks like with catalogs
+# run the script:
+$ cd backend/src/scripts
+$ npm run load-data
+
 # start the server.
 $ cd backend
-$ npm install
 $ npm start
 
 # For running the Client - go back to this repository
