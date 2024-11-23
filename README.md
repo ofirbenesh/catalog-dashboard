@@ -1,6 +1,9 @@
 # Catalog Dashboard
 
-The backend for the **Catalog Dashboard** application is built with **NestJS** and uses **MongoDB** for database storage. It provides a REST API for managing catalogs, including CRUD operations, and includes a script to load mock catalogs into the database for development or testing purposes.
+The frontend for the **Catalog Dashboard** application is a **React-based** UI that interacts with the backend API to manage catalogs. It allows users to view, add, update, and delete catalogs dynamically. The application is styled using **Bootstrap** for a clean and responsive user interface.
+
+link to backend repository:
+https://github.com/ofirbenesh/backend.git
 
 ---
 
@@ -9,6 +12,9 @@ The backend for the **Catalog Dashboard** application is built with **NestJS** a
 - Search functionality for filtering catalogs.
 - Dynamic updates to reflect changes made to the catalogs.
 - Responsive design with Bootstrap.
+
+<img width="957" alt="image" src="https://github.com/user-attachments/assets/da29b44b-fd5b-4637-9cf3-1b881b1b566d">
+
 
 ---
 
@@ -23,18 +29,29 @@ The backend for the **Catalog Dashboard** application is built with **NestJS** a
 Make sure you have the following installed:
 - **Node.js** (v18 or later)
 - **npm** (v8 or later)
+- MongoDB
 
 ---
 
 ## Installation and Setup
-1. Clone the repository:
-   ```bash
-   git clone <repository-url>
+To clone and run this application, you'll need [Git](https://git-scm.com) installed on your computer.
+  
+From your command line:
+  
+```bash
+# Clone this repository.
+$ git clone https://github.com/ofirbenesh/catalog-dashboard.git
 
-2. Install dependencies:
-   ```npm install
+# For running the backend - go to repository
+$ gh repo clone ofirbenesh/backend
 
-2. start the App:
-   ```npm start
+# start the server.
+$ cd backend
+$ npm install
+$ npm start
+
+# For running the Client - go back to this repository
+$ cd catalog-dashboard
+$ npm start
 
 The frontend will run on http://localhost:3001.
