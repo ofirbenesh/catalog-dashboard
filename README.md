@@ -53,5 +53,13 @@ $ npm start
 # For running the Client - go back to this repository
 $ cd catalog-dashboard
 $ npm start
-
+```
 The frontend will run on http://localhost:3001.
+
+## How to run and use the app - video
+
+
+https://github.com/user-attachments/assets/3343e332-0415-4bd1-a222-fb07ef4b9da8
+
+
+
